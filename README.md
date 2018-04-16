@@ -1,2 +1,2 @@
 # StudentCheck
-Entrance scanning of NFC cards.
+Entrance scanning, two applications: java and android.
