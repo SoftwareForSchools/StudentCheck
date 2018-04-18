@@ -168,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case "student_number_not_found":
                     // When studentNumber is null we have to add this to the db
                     setUiStudentNotInDatabase();
-                    mLastStudentCardSerial = studentCardSerial.toString();
-                    showAddStudentDialogFragment(mLastStudentCardSerial);
+                    showAddStudentDialogFragment(studentCardSerial.toString());
                     break;
                 case "no_internet_connection":
                     // No internet connection, toast is shown
@@ -179,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dbHelper.checkStudentIn(studentNumber);
                     break;
             }
+            mLastStudentCardSerial = studentCardSerial.toString();
         } else { // Say that this was already scanned
             Toast.makeText(this, getString(R.string.student_already_scanned), Toast.LENGTH_SHORT).show();
         }
