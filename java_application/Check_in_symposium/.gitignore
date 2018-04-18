@@ -21,7 +21,7 @@ Thumbs.db
 # OSX files
 .DS_Store
 
-# Android Studio
+# Intellij
 *.iml
 .idea
 #.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
@@ -37,6 +37,11 @@ obj/
 
 # Package Files #
 *.jar
+!mail.jar
+!opencsv-3.0.jar
+!mysql-connector-java-5.1.23-bin.jar
+!AbsoluteLayout.jar
+
 *.war
 *.ear
 *.zip
