@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Student Check</string>
+    <string name="nfc_enabled">NFC: Aan</string>
+    <string name="nfc_disabled">NFC: Staat uit</string>
+    <string name="nfc_not_supported">NFC: Niet ondersteund</string>
+    <string name="scan_student_text">Scan studentenkaart om in te checken</string>
+    <string name="loading_nfc_text">NFC: laden…</string>
+    <string name="update">Updaten</string>
+    <string name="update_bedrijfspunten">Update bedrijfspunten</string>
+    <string name="add_button">Voeg toe</string>
+    <string name="cancel_button">Annuleren</string>
+    <string name="nfc_image">NFC_image</string>
+    <string name="student_card_not_registered">Deze pas moet geregistreerd worden!</string>
+    <string name="student_card_checked_in">{0} is ingechecked</string>
+    <string name="check_in_via_studentnummer">Check in via studentnummer</string>
+    <string name="db_connection_loading">Db connectie laden…</string>
+    <string name="db_connected">Verbonden met db</string>
+    <string name="db_not_connected">Niet verbonden met db</string>
+    <string name="fill_in_student_number">Vul studentnummer in om in te checken:</string>
+    <string name="student_number">Studentnummer</string>
+    <string name="check_in">Check in</string>
+    <string name="add_student_number">Voeg studentnummer toe:</string>
+    <string name="database_url">jdbc:mysql://oege.ie.hva.nl/{0}</string>
+    <string name="not_possible_without_internet">Je kan dit niet doen zonder internet connectie</string>
+    <string name="student_card_not_db">Kon student met deze pas niet vinden.</string>
+    <string name="student_checked_in">Student met het volgende nummer is ingecheckt: {0}</string>
+    <string name="error_student_not_checked_in">ERROR: Het lukte niet om de volgende student in te checken: {0}</string>
+    <string name="student_added_db"> {0} is toegevoegd aan de database</string>
+    <string name="error_student_not_added_db">ERROR: Student met het volgende studentnummer kon niet toegevoegd worden: {0}</string>
+    <string name="updated_table">De bedrijfspunten tabel is geüpdatet</string>
+    <string name="error_updating_bedrijfspunten_table">ERROR: Updaten van bedrijfspunten is niet gelukt, probeer later opnieuw. Of kijk naar de stack trace wat er verkeerd gegaan is.</string>
+    <string name="student_numbers_only_numbers">Student nummers kunnen alleen bestaan uit cijfers!</string>
+    <string name="conformation_updating_bedrijfspunten">Weet je zeker dat je de bedrijfspunten wilt updaten?</string>
+    <string name="turn_nfc_on_msg">Voordat je deze app volledig wilt gebruiken. Moet je wel je NFC aanzetten.</string>
+    <string name="nfc_not_supported_msg">Je telefoon heeft geen NFC, je kan de app niet volledig gebruiken.</string>
+    <string name="student_already_scanned">Deze student is al ingescand.</string>
+</resources>
