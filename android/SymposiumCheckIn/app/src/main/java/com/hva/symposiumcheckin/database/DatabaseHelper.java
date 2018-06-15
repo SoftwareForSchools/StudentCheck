@@ -23,9 +23,9 @@ import java.util.Locale;
 
 public class DatabaseHelper {
     // TODO: Add Database Information
-    private static final String DB_USER_NAME = "";
-    private static final String DB_PASSWORD = "";
-    private static final String DB_NAME = "";
+    private static final String DB_USER_NAME = "oppenhc001";
+    private static final String DB_PASSWORD = "8jsAkN4vtvG9PP";
+    private static final String DB_NAME = "zoppenhc001";
 
     // Tables that are changed
     private static final String LOGIN_BU_TABLE_NAME = "LoginBU";
@@ -109,9 +109,6 @@ public class DatabaseHelper {
             @Override
             public void run() {
                 try {
-                    // Class that is needed
-                    Class.forName("com.mysql.jdbc.Driver");
-
                     //Url to the database
                     String url = MessageFormat.format(mainActivity.getString(R.string.database_url), DB_NAME);
                     dbConnection = DriverManager.getConnection(url, DB_USER_NAME, DB_PASSWORD);
@@ -119,9 +116,6 @@ public class DatabaseHelper {
                 } catch (SQLException e) {
                     isConnected[0] = false;
                     Log.e("SQL_EXCEPTION", e.getLocalizedMessage());
-                } catch (ClassNotFoundException e) {
-                    isConnected[0] = false;
-                    Log.e("CLASS_NOT_FOUND", e.getMessage());
                 }
             }
         };
