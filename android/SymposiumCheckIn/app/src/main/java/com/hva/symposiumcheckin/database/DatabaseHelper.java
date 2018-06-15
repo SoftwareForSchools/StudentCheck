@@ -109,6 +109,9 @@ public class DatabaseHelper {
             @Override
             public void run() {
                 try {
+                    // Class that is needed
+                    Class.forName("com.mysql.jdbc.Driver");
+
                     //Url to the database
                     String url = MessageFormat.format(mainActivity.getString(R.string.database_url), DB_NAME);
                     dbConnection = DriverManager.getConnection(url, DB_USER_NAME, DB_PASSWORD);
@@ -116,6 +119,9 @@ public class DatabaseHelper {
                 } catch (SQLException e) {
                     isConnected[0] = false;
                     Log.e("SQL_EXCEPTION", e.getLocalizedMessage());
+                } catch (ClassNotFoundException e) {
+                    isConnected[0] = false;
+                    Log.e("Class_NOT_FOUND", e.getLocalizedMessage());
                 }
             }
         };
