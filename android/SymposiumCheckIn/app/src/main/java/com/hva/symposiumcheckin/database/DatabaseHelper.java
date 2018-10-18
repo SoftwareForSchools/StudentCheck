@@ -256,8 +256,8 @@ public class DatabaseHelper {
 
                     // Add new students to Bedrijfspunten
                     PreparedStatement addNewStudentsToBedrijfspunten = dbConnection.prepareStatement(
-                            "INSERT INTO " + BEDRIJFSPUNTEN_TABLE_NAME + " (Studentnummer, StudentNaam, AantalKeerGeweest, AantalBedrijfsuren, AantalBedrijfspunten) " +
-                                    "SELECT DISTINCT studentnummer, '', 0, 0, 0.0 " +
+                            "INSERT INTO " + BEDRIJFSPUNTEN_TABLE_NAME + " (Studentnummer, AantalKeerGeweest, AantalBedrijfsuren, AantalBedrijfspunten) " +
+                                    "SELECT DISTINCT studentnummer, 0, 0, 0.0 " +
                                     "FROM " + LOGIN_BU_TABLE_NAME + " " +
                                     "WHERE NOT EXISTS (SELECT Studentnummer FROM " + BEDRIJFSPUNTEN_TABLE_NAME + " " +
                                     "WHERE " + BEDRIJFSPUNTEN_TABLE_NAME + ".Studentnummer = " + LOGIN_BU_TABLE_NAME + ".studentnummer);");
