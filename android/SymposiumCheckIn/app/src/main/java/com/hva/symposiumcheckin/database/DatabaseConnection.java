@@ -1,11 +1,8 @@
 package com.hva.symposiumcheckin.database;
 
-import com.hva.symposiumcheckin.R;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 
 public class DatabaseConnection {
 

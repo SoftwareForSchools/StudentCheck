@@ -145,7 +145,7 @@ public class DatabaseHelper {
                         mStudentNumber = "student_number_not_found";
                         addStringToDbContainer(mainActivity.getString(R.string.student_card_not_db));
                     }
-
+                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -182,7 +182,7 @@ public class DatabaseHelper {
                     } else {
                         addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_checked_in), studentNumber));
                     }
-
+                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_checked_in), studentNumber));
@@ -208,7 +208,7 @@ public class DatabaseHelper {
                     } else {
                         addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_added_db), newStudentNumber));
                     }
-
+                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_added_db), newStudentNumber));
@@ -244,7 +244,7 @@ public class DatabaseHelper {
                     makeTempTable.executeUpdate();
                     deleteDuplicates.executeUpdate();
                     dropTempTable.executeUpdate();
-
+                    DB_INSTANCE.closeConnection();
 
                     // Add new students to Bedrijfspunten
                     PreparedStatement addNewStudentsToBedrijfspunten = DB_INSTANCE.getConnection().prepareStatement(
@@ -273,7 +273,7 @@ public class DatabaseHelper {
                     addNewStudentsToBedrijfspunten.executeUpdate();
                     updateBedrijfspuntenDB.executeUpdate();
                     updateBedrijfspuntenRow.executeUpdate();
-
+                    DB_INSTANCE.closeConnection();
 
                     // Set this message in the db container text view
                     addStringToDbContainer(mainActivity.getString(R.string.updated_table));
