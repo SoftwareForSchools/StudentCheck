@@ -1,8 +1,14 @@
 package com.hva.symposiumcheckin.database;
 
+import android.widget.Toast;
+
+import com.hva.symposiumcheckin.MainActivity;
+import com.hva.symposiumcheckin.R;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 public class DatabaseConnection {
 
@@ -53,16 +59,36 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     }
-    public boolean setUserInfo(String dbName, String username, String password){
-        try{
-            this.dbName = dbName;
-            this.username = username;
-            this.password = password;
-            return true;
-        }catch (Exception e){
+    public boolean setUserInfo(String dbName, String username, String password, final MainActivity mContext) {
+        final boolean userStatus[] = {false};
+        this.dbName = dbName;
+        this.username = username;
+        this.password = password;
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                // Check if device has internet connection
+                try {
+                    getConnection();
+                    if (getStatus()) {
+                        userStatus[0] = true;
+                    } else {
+                        Toast.makeText(mContext, "Incorrecte combinatie van Databasenaam, gebruikersnaam en wachtwoord.", Toast.LENGTH_SHORT).show();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+        try {
+            // This join is to wait till the thread is done. Otherwise, we do not have mStudentNumber
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return false;
+        return userStatus[0];
     }
 
     public String getUsername() {

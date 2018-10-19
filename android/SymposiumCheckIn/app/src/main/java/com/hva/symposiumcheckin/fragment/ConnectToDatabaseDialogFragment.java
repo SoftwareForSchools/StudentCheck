@@ -23,7 +23,7 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
     private MainActivity mContext;
 
     // Reference to DatabaseConnection
-    private DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+    private DatabaseConnection dbInstance = DatabaseConnection.getInstance();
 
     public static ConnectToDatabaseDialogFragment newInstance() {
         ConnectToDatabaseDialogFragment fragment = new ConnectToDatabaseDialogFragment();
@@ -69,9 +69,9 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
 
 
         // Set userinfo gathered from databaseconnection
-        etDbName.setText(dbConnection.getDbName());
-        etUsername.setText(dbConnection.getUsername());
-        etPassword.setText(dbConnection.getPassword());
+        etDbName.setText(dbInstance.getDbName());
+        etUsername.setText(dbInstance.getUsername());
+        etPassword.setText(dbInstance.getPassword());
         return view;
     }
 
@@ -82,13 +82,12 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
                 dismiss();
                 break;
             case R.id.connect_to_database:
-                // TODO: Make a function that checks whether entered credentials are correct.
-                if(dbConnection.setUserInfo(etDbName.getText().toString(), etUsername.getText().toString(),etPassword.getText().toString())){
+                if(dbInstance.setUserInfo(etDbName.getText().toString(), etUsername.getText().toString(),etPassword.getText().toString(),mContext)){
                     mContext.setUiAfterDatabaseConnection(true);
                     dismiss();
-
                 }else{
                     Toast.makeText(mContext, "Incorrecte combinatie van Databasenaam, gebruikersnaam en wachtwoord.", Toast.LENGTH_SHORT).show();
+                    mContext.setUiAfterDatabaseConnection(false);
                 }
                 break;
         }
