@@ -13,6 +13,9 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 import com.hva.symposiumcheckin.database.DatabaseHelper;
 import com.hva.symposiumcheckin.fragment.AddStudentDatabaseDialogFragment;
 import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
+import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
 
 import java.text.MessageFormat;
 
@@ -58,10 +62,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLastStudentCardSerial = "";
 
         setView();
+
         getNFCReader();
 
         dbHelper = new DatabaseHelper(this);
         getDbConnection();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.commonmenus, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.mnuConnect){
+            Toast.makeText(getApplicationContext(),"Test",Toast.LENGTH_LONG).show();
+            showConnectToDatabaseFragment();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -132,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView.setVisibility(View.GONE);
         scanNFCImage.setVisibility(View.VISIBLE);
 
-        getNFCReader();
         getDbConnection();
+        getNFCReader();
     }
 
     @Override
@@ -287,6 +311,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DialogFragment addStudentFragment = CheckInStudentNumberDialogFragment.newInstance();
         addStudentFragment.setCancelable(false);
         addStudentFragment.show(ft, "addViaStudentNumberDialog");
+    }
+
+    private void showConnectToDatabaseFragment() {
+        if (checkInFragmentOpen) return;
+        checkInFragmentOpen = true;
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("tag");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment connectToDatabase = ConnectToDatabaseDialogFragment.newInstance();
+        connectToDatabase.setCancelable(false);
+        connectToDatabase.show(ft, "tag");
     }
 
     /**

@@ -34,4 +34,9 @@
     <string name="turn_nfc_on_msg">Voordat je deze app volledig wilt gebruiken. Moet je wel je NFC aanzetten.</string>
     <string name="nfc_not_supported_msg">Je telefoon heeft geen NFC, je kan de app niet volledig gebruiken.</string>
     <string name="student_already_scanned">Deze student is al ingescand.</string>
+    <string name="db_username">Gebruikersnaam</string>
+    <string name="db_password">Wachtwoord</string>
+    <string name="connect_message">Vul je gegevens voor jouw Oege account in.</string>
+    <string name="connect">Connect</string>
+    <string name="db_name">Naam van de database</string>
 </resources>
