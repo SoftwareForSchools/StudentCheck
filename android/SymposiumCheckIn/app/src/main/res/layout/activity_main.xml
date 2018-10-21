@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/backgroundimage"
     tools:context="com.hva.symposiumcheckin.MainActivity">
 
     <TextView
@@ -41,13 +42,12 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/scanNFCImage"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="138dp"
-        android:layout_marginBottom="41dp"
+        android:layout_marginTop="226dp"
+        android:layout_marginBottom="-145dp"
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:visibility="gone"/>
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/scanNFCImage"

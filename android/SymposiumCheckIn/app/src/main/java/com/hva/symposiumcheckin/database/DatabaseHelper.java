@@ -1,5 +1,6 @@
 package com.hva.symposiumcheckin.database;
 
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.hva.symposiumcheckin.MainActivity;

@@ -68,7 +68,7 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
         btnConnectToDatabase.setOnClickListener(this);
 
 
-        // Set userinfo gathered from databaseconnection
+        // Set userinfo: gathered from DatabaseConnection
         etDbName.setText(dbInstance.getDbName());
         etUsername.setText(dbInstance.getUsername());
         etPassword.setText(dbInstance.getPassword());
@@ -82,12 +82,12 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
                 dismiss();
                 break;
             case R.id.connect_to_database:
-                if(dbInstance.setUserInfo(etDbName.getText().toString(), etUsername.getText().toString(),etPassword.getText().toString(),mContext)){
-                    mContext.setUiAfterDatabaseConnection(true);
-                    dismiss();
+                if(dbInstance.setUserInfo(etDbName.getText().toString(), etUsername.getText().toString(),etPassword.getText().toString())){
+                    if(dbInstance.getStatus()) {
+                        dismiss();
+                    }
                 }else{
                     Toast.makeText(mContext, "Incorrecte combinatie van Databasenaam, gebruikersnaam en wachtwoord.", Toast.LENGTH_SHORT).show();
-                    mContext.setUiAfterDatabaseConnection(false);
                 }
                 break;
         }

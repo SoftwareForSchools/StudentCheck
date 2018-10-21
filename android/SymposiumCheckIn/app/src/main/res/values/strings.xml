@@ -14,8 +14,8 @@
     <string name="student_card_checked_in">{0} is ingechecked</string>
     <string name="check_in_via_studentnummer">Check in via studentnummer</string>
     <string name="db_connection_loading">Db connectie laden…</string>
-    <string name="db_connected">Verbonden met db</string>
-    <string name="db_not_connected">Niet verbonden met db</string>
+    <string name="db_connected">Verbonden met database</string>
+    <string name="db_not_connected">Niet verbonden met database</string>
     <string name="fill_in_student_number">Vul studentnummer in om in te checken:</string>
     <string name="student_number">Studentnummer</string>
     <string name="check_in">Check in</string>
@@ -39,4 +39,6 @@
     <string name="connect_message">Vul je gegevens voor jouw Oege account in.</string>
     <string name="connect">Connect</string>
     <string name="db_name">Naam van de database</string>
+    <string name="jdbc_driver_not_found">MYSQL ERROR: jdbc driver niet gevonden.</string>
+    <string name="failed_closing_sql_connection">MYSQL ERROR: fout in het afsluiten van de connectie</string>
 </resources>

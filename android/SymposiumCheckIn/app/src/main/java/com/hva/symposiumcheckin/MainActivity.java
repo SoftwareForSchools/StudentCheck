@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hva.symposiumcheckin.database.DatabaseConnection;
 import com.hva.symposiumcheckin.database.DatabaseHelper;
 import com.hva.symposiumcheckin.fragment.AddStudentDatabaseDialogFragment;
 import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Database helper for getting information
     public DatabaseHelper dbHelper;
+
     // Boolean to check if the Student check in fragment is already open
     public boolean checkInFragmentOpen = false;
 
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getNFCReader();
 
         dbHelper = new DatabaseHelper(this);
-        getDbConnection();
+
+        // Set a reference to the this activity in DatabaseConnection
+        DatabaseConnection.getInstance().setMainActivity(this);
     }
 
     @Override
@@ -81,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         if(id == R.id.mnuConnect){
-            Toast.makeText(getApplicationContext(),"Test",Toast.LENGTH_LONG).show();
             showConnectToDatabaseFragment();
         }
 
@@ -217,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView.setText(MessageFormat.format(getString(R.string.student_card_checked_in), studentNumber));
         checkInStatusView.setTextColor(Color.GREEN);
 
-        scanNFCImage.setVisibility(View.GONE);
         checkInStatusView.setVisibility(View.VISIBLE);
 
     }
