@@ -17,7 +17,7 @@ public class DatabaseConnection {
 
     private MainActivity mContext;
 
-    // TODO: Create a 'remember me' button.
+    // TODO: Create a 'remember me' button, which remebers user
     private String dbName;
     private String username;
     private String password;
@@ -52,6 +52,7 @@ public class DatabaseConnection {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                addStringToDbContainer("Inloggegevens incorrect");
             }
         }
         setUiAfterDatabaseConnection(isConnected);

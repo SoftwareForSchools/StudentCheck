@@ -51,7 +51,6 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO : get reference to current password and username (perhaps url to database)
     }
 
     @Override

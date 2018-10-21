@@ -28,7 +28,12 @@ import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
 import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
 
 import java.text.MessageFormat;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
 
+//TODO: Stop app from crashing on first startup
+//TODO: This only occurs during first startup, so not that important to fix.
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
@@ -159,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView.setVisibility(View.GONE);
         scanNFCImage.setVisibility(View.VISIBLE);
 
-        getDbConnection();
         getNFCReader();
     }
 
@@ -354,6 +358,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      *
      * @param dbStatusString The string that is added to the container view
      */
+
+    //TODO: Append current time to message.
+    //TODO: Make message box scrollable, so all messages can be viewed.
     public void setDbContainerData(String dbStatusString) {
         dbDataContainer.append(dbStatusString + "\n");
     }
