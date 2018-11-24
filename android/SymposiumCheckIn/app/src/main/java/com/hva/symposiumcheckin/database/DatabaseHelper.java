@@ -287,4 +287,56 @@ public class DatabaseHelper {
         };
         thread.start();
     }
+
+    public void checkForTables() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                Statement stmt = null;
+
+                final String SQL_CREATE_BEDRIJFSPUNTEN = "CREATE TABLE IF NOT EXISTS `Bedrijfspunten` (\n" +
+                        "  `Studentnummer` int(11) NOT NULL,\n" +
+                        "  `AantalKeerGeweest` int(11) NOT NULL,\n" +
+                        "  `AantalBedrijfsuren` int(11) NOT NULL,\n" +
+                        "  `AantalBedrijfspunten` double NOT NULL,\n" +
+                        "  PRIMARY KEY (`Studentnummer`)\n" +
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
+//                final String SQL_CREATE_LOGIN_BU = "CREATE TABLE IF NOT EXISTS `LoginBU` (\n" +
+//                        "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+//                        "  `studentnummer` int(11) NOT NULL,\n" +
+//                        "  `checkIn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+//                        "  `checkUit` timestamp NULL DEFAULT NULL,\n" +
+//                        "  `ToegevoegdBedrijfspunten` tinyint(1) NOT NULL DEFAULT '0',\n" +
+//                        "  PRIMARY KEY (`studentnummer`,`checkIn`),\n" +
+//                        "  KEY `id` (`id`)\n" +
+//                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+//
+//                final String SQL_CREATE_STUDENTCODE = "CREATE TABLE IF NOT EXISTS `StudentCode` (\n" +
+//                        "  `StudentCode` int(11) NOT NULL,\n" +
+//                        "  `Serial` varchar(20) NOT NULL,\n" +
+//                        "  `DatumGemaakt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
+//                        "  PRIMARY KEY (`Serial`),\n" +
+//                        "  UNIQUE KEY `Serial` (`Serial`)\n" +
+//                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+                try {
+                    stmt = DB_INSTANCE.getConnection().createStatement();
+                    stmt.executeUpdate(SQL_CREATE_BEDRIJFSPUNTEN);
+//                    PreparedStatement createTableBedrijfspunten = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
+//                    PreparedStatement createTableLoginBU = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
+//                    PreparedStatement createTableStudentcode = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
+//                    createTableBedrijfspunten.execute();
+//                    createTableLoginBU.execute();
+//                    createTableStudentcode.execute();
+                    DB_INSTANCE.closeConnection();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
 }

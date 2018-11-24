@@ -66,7 +66,6 @@ public class ConnectToDatabaseDialogFragment extends DialogFragment implements V
         btnConnectToDatabase = view.findViewById(R.id.connect_to_database);
         btnConnectToDatabase.setOnClickListener(this);
 
-
         // Set userinfo: gathered from DatabaseConnection
         etDbName.setText(dbInstance.getDbName());
         etUsername.setText(dbInstance.getUsername());
