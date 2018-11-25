@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getNFCReader();
 
         buttonRefreshNFC = findViewById(R.id.button);
+        buttonRefreshNFC.setBackgroundColor(Color.TRANSPARENT);
         buttonRefreshNFC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
