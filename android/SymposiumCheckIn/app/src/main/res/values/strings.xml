@@ -42,4 +42,8 @@
     <string name="jdbc_driver_not_found">MYSQL ERROR: jdbc driver niet gevonden.</string>
     <string name="failed_closing_sql_connection">MYSQL ERROR: fout in het afsluiten van de connectie</string>
     <string name="button_refresh">REFRESH</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_checkedin">Checked in</string>
+    <string name="nav_database">Database</string>
+    <string name="nav_imagetext">Student Check</string>
 </resources>

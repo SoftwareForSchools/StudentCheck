@@ -13,9 +13,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,9 +27,6 @@ import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
 import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
 
 import java.text.MessageFormat;
-import java.time.*;
-import java.time.format.*;
-import java.util.*;
 
 //TODO: Stop app from crashing on first startup
 //TODO: This only occurs during first startup, so not that important to fix.
@@ -47,8 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // String in which the last student card credential is saved, for when someone accidentally scans two times in a row
     private String mLastStudentCardSerial;
 
+    //Toolbar
+    private Toolbar toolbar;
+
     // Buttons
     private Button buttonRefreshNFC;
+    private Button buttonConnectDB;
 
     // TextViews
     private TextView nfcStatusView;
@@ -69,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // Set last student credential to empty string
         mLastStudentCardSerial = "";
 
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getNFCReader();
 
-        buttonRefreshNFC = findViewById(R.id.button);
+        buttonRefreshNFC = findViewById(R.id.buttonRefreshNFC);
         buttonRefreshNFC.setBackgroundColor(Color.TRANSPARENT);
         buttonRefreshNFC.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,29 +86,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getNFCReader();
             }
         });
+        buttonConnectDB = findViewById(R.id.buttonConnectDB);
+        buttonConnectDB.setBackgroundColor(Color.TRANSPARENT);
+        buttonConnectDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showConnectToDatabaseFragment();
+            }
+        });
 
         dbHelper = new DatabaseHelper(this);
 
         // Set a reference to the this activity in DatabaseConnection
         DatabaseConnection.getInstance().setMainActivity(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.commonmenus, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.mnuConnect){
-            showConnectToDatabaseFragment();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
