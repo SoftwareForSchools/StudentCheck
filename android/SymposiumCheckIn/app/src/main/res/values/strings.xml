@@ -41,4 +41,5 @@
     <string name="db_name">Naam van de database</string>
     <string name="jdbc_driver_not_found">MYSQL ERROR: jdbc driver niet gevonden.</string>
     <string name="failed_closing_sql_connection">MYSQL ERROR: fout in het afsluiten van de connectie</string>
+    <string name="button_refresh">REFRESH</string>
 </resources>

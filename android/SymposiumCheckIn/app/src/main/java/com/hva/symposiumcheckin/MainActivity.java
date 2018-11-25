@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // String in which the last student card credential is saved, for when someone accidentally scans two times in a row
     private String mLastStudentCardSerial;
 
+    // Buttons
+    private Button buttonRefreshNFC;
+
     // TextViews
     private TextView nfcStatusView;
     private TextView dbConnectionStatus;
@@ -71,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setView();
 
         getNFCReader();
+
+        buttonRefreshNFC = findViewById(R.id.button);
+        buttonRefreshNFC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getNFCReader();
+            }
+        });
 
         dbHelper = new DatabaseHelper(this);
 
