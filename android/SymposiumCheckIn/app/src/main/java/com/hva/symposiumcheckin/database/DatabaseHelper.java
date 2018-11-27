@@ -228,24 +228,28 @@ public class DatabaseHelper {
                     return;
                 }
                 try {
-                    // Make a temporary table and get the max id from studentnumber and day
-                    PreparedStatement makeTempTable = DB_INSTANCE.getConnection().prepareStatement(
-                            "CREATE TEMPORARY TABLE tmp_user (" +
-                                    "SELECT MAX(id) id " +
-                                    "FROM " + LOGIN_BU_TABLE_NAME +
-                                    " GROUP BY studentnummer, CAST(checkIn AS DATE))");
+                    // Is used for a multiquery statement, which is used so the temptable can be used by the following querys
+                    // (A temptable can only exist within a connection!!)
+                    final StringBuilder queryBuilder = new StringBuilder();
+                    // Make a temporary table and get the latest checkin filtered on studentnumber and day.
+                       queryBuilder.append(
+                                "CREATE TEMPORARY TABLE tmp_user (" +
+                                "SELECT MAX(id) id " +
+                                "FROM " + LOGIN_BU_TABLE_NAME +
+                                "GROUP BY studentnummer, CAST(checkIn AS DATE));");
 
                     // Delete all Duplicate of the same day, someone can't enter the symposium twice
-                    PreparedStatement deleteDuplicates = DB_INSTANCE.getConnection().prepareStatement(
-                            "DELETE FROM " + LOGIN_BU_TABLE_NAME + " WHERE id NOT IN (SELECT id FROM tmp_user);");
+                        queryBuilder.append(
+                                "DELETE FROM " + LOGIN_BU_TABLE_NAME + " WHERE id NOT IN (SELECT id FROM tmp_user);");
 
                     // Drop the temporary table
-                    PreparedStatement dropTempTable = DB_INSTANCE.getConnection().prepareStatement("DROP TABLE tmp_user;");
+                        queryBuilder.append(
+                                "DROP TABLE tmp_user;");
 
-                    makeTempTable.executeUpdate();
-                    deleteDuplicates.executeUpdate();
-                    dropTempTable.executeUpdate();
+                    PreparedStatement multiStatement = DB_INSTANCE.getConnection().prepareStatement(queryBuilder.toString());
+                    multiStatement.executeUpdate();
                     DB_INSTANCE.closeConnection();
+
 
                     // Add new students to Bedrijfspunten
                     PreparedStatement addNewStudentsToBedrijfspunten = DB_INSTANCE.getConnection().prepareStatement(

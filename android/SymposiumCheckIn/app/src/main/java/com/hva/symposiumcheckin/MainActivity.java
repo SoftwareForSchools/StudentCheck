@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,9 +28,9 @@ import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
 import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-//TODO: Stop app from crashing on first startup
-//TODO: This only occurs during first startup, so not that important to fix.
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView = findViewById(R.id.checkInStatusView);
         dbConnectionStatus = findViewById(R.id.dbConnectionStatusView);
         dbDataContainer = findViewById(R.id.dbActionsContainer);
+        // Make the messagebox scrollable (in combination with editted xml file)
+        dbDataContainer.setMovementMethod(new ScrollingMovementMethod());
 
         findViewById(R.id.updateBedrijfspuntenButton).setOnClickListener(this);
         findViewById(R.id.checkInViaStudentNumberButton).setOnClickListener(this);
@@ -365,9 +369,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param dbStatusString The string that is added to the container view
      */
 
-    //TODO: Append current time to message.
-    //TODO: Make message box scrollable, so all messages can be viewed.
     public void setDbContainerData(String dbStatusString) {
-        dbDataContainer.append(dbStatusString + "\n");
+        String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+        dbDataContainer.append(timeStamp + " - " +dbStatusString +"\n");
     }
 }

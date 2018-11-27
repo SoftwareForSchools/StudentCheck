@@ -42,7 +42,8 @@ public class DatabaseConnection {
             try {
                 //TODO: Get a secure connection, at the moment not supported by Oege server.
                 Class.forName("com.mysql.jdbc.Driver");
-                String url = "jdbc:mysql://oege.ie.hva.nl:3306/" + dbName;
+                String url = "jdbc:mysql://oege.ie.hva.nl:3306/" + dbName
+                            + "?allowMultiQueries=true";
 //                        + "?verifyServerCertificate=true"
 //                        + "&useSSL=true"
 //                        + "&requireSSL=true";
@@ -65,9 +66,8 @@ public class DatabaseConnection {
 
     public void closeConnection() {
         try {
-            connection.close();
             connection = null;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             addStringToDbContainer(mContext.getString(R.string.failed_closing_sql_connection));
             e.printStackTrace();
         }
