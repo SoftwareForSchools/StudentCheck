@@ -92,20 +92,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setView();
         setButtons();
-
         getNFCReader();
 
         dbHelper = new DatabaseHelper(this);
 
         // Set a reference to the this activity in DatabaseConnection
         DatabaseConnection.getInstance().setMainActivity(this);
+        navigationView.setCheckedItem(R.id.nav_scan);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.nav_scan:
-                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.fragment_container)).commit();
+                if(getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
+                    getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.fragment_container)).commit();
+                }
             break;
             case R.id.nav_checkedin:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
