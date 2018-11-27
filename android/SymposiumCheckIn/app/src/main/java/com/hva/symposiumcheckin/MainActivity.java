@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Set last student credential to empty string
@@ -361,7 +360,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
             if(!tablesChecked) {
-                dbHelper.checkForTables(); // check the databasehelper function's to-do to check why this is commented!
+                dbHelper.insertTables();
+                checkInStatusView.setText("De tabel komt voor in de database!!!");
                 tablesChecked = true;
             }
         } else {

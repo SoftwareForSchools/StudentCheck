@@ -1,11 +1,15 @@
 package com.hva.symposiumcheckin.database;
 
+import android.content.DialogInterface;
 import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.hva.symposiumcheckin.MainActivity;
 import com.hva.symposiumcheckin.R;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -292,17 +296,11 @@ public class DatabaseHelper {
         thread.start();
     }
 
-    public void checkForTables() {
+    public boolean insertTables() {
+        final boolean [] status = {false};
         Thread thread = new Thread() {
             @Override
             public void run() {
-                /**
-                 * TODO: Only Bedrijfspunten is updated, after which a whole series of error occur.
-                 * Check why this is the case. My guess is that this occurs because the connection is closed for some reason.
-                 * Also the way that this function is called might have something to do with the error. It is called from
-                 * MainActicity, Line: 349
-                  */
-
                 final StringBuilder queryBuilder = new StringBuilder();
 
                 queryBuilder.append("CREATE TABLE IF NOT EXISTS `Bedrijfspunten` (\n" +
@@ -336,6 +334,7 @@ public class DatabaseHelper {
 
                     PreparedStatement multiQueryStatement = DB_INSTANCE.getConnection().prepareStatement(queryBuilder.toString());
                     multiQueryStatement.executeUpdate();
+                    status[0] = true;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -343,5 +342,6 @@ public class DatabaseHelper {
             }
         };
         thread.start();
+        return status[0];
     }
 }
