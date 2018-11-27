@@ -1,11 +1,13 @@
 package com.hva.symposiumcheckin.database;
 
-import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hva.symposiumcheckin.MainActivity;
 import com.hva.symposiumcheckin.R;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +22,10 @@ import java.util.Locale;
  */
 
 public class DatabaseHelper {
+    // TODO: Add Database Information
+    private static final String DB_USER_NAME = "vonkr1";
+    private static final String DB_PASSWORD = "U0G7pXQIqeNbSVbe";
+    private static final String DB_NAME = "zvonkr1";
 
     // Tables that are changed
     private static final String LOGIN_BU_TABLE_NAME = "LoginBU";
@@ -31,7 +37,7 @@ public class DatabaseHelper {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", NL);
 
     // Connection to database
-    private final DatabaseConnection DB_INSTANCE = DatabaseConnection.getInstance();
+    private Connection dbConnection;
 
     private String mStudentNumber;
 
@@ -103,14 +109,19 @@ public class DatabaseHelper {
             @Override
             public void run() {
                 try {
-                    DB_INSTANCE.getConnection();
-                    if(DB_INSTANCE.getStatus()) {
-                        isConnected[0] = true;
-                    }else{
-                        isConnected[0]=false;
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
+                    // Class that is needed
+                    Class.forName("com.mysql.jdbc.Driver");
+
+                    //Url to the database
+                    String url = MessageFormat.format(mainActivity.getString(R.string.database_url), DB_NAME);
+                    dbConnection = DriverManager.getConnection(url, DB_USER_NAME, DB_PASSWORD);
+                    isConnected[0] = true;
+                } catch (SQLException e) {
+                    isConnected[0] = false;
+                    Log.e("SQL_EXCEPTION", e.getLocalizedMessage());
+                } catch (ClassNotFoundException e) {
+                    isConnected[0] = false;
+                    Log.e("Class_NOT_FOUND", e.getLocalizedMessage());
                 }
             }
         };
@@ -136,7 +147,7 @@ public class DatabaseHelper {
                     return;
                 }
                 try {
-                    Statement statement = DB_INSTANCE.getConnection().createStatement();
+                    Statement statement = dbConnection.createStatement();
                     // Statement to check if the Card serial exists in the database
                     ResultSet result = statement.executeQuery("SELECT `StudentCode` FROM `" + STUDENT_CODE_TABLE_NAME + "` WHERE `Serial` = \"" + studentCardSerial.toString() + "\"");
 
@@ -146,7 +157,6 @@ public class DatabaseHelper {
                         mStudentNumber = "student_number_not_found";
                         addStringToDbContainer(mainActivity.getString(R.string.student_card_not_db));
                     }
-                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -171,7 +181,7 @@ public class DatabaseHelper {
                     return;
                 }
                 try {
-                    PreparedStatement statement = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement statement = dbConnection.prepareStatement(
                             "INSERT INTO " + LOGIN_BU_TABLE_NAME + " (studentnummer, checkIn, checkUit) VALUES('"
                                     + studentNumber + "','" + getCurrentDateString() + "','" + getDateInTwoHours() + "');");
                     int changedRow = statement.executeUpdate();
@@ -183,7 +193,6 @@ public class DatabaseHelper {
                     } else {
                         addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_checked_in), studentNumber));
                     }
-                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_checked_in), studentNumber));
@@ -198,7 +207,7 @@ public class DatabaseHelper {
             @Override
             public void run() {
                 try {
-                    PreparedStatement statement = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement statement = dbConnection.prepareStatement(
                             "INSERT INTO " + STUDENT_CODE_TABLE_NAME + " (StudentCode, Serial, DatumGemaakt) VALUES('"
                                     + newStudentNumber + "','" + newStudentCardSerial + "','" + getCurrentDateString() + "');");
                     int changedRow = statement.executeUpdate();
@@ -209,7 +218,6 @@ public class DatabaseHelper {
                     } else {
                         addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_added_db), newStudentNumber));
                     }
-                    DB_INSTANCE.closeConnection();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     addStringToDbContainer(MessageFormat.format(mainActivity.getString(R.string.error_student_not_added_db), newStudentNumber));
@@ -229,26 +237,25 @@ public class DatabaseHelper {
                 }
                 try {
                     // Make a temporary table and get the max id from studentnumber and day
-                    PreparedStatement makeTempTable = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement makeTempTable = dbConnection.prepareStatement(
                             "CREATE TEMPORARY TABLE tmp_user (" +
                                     "SELECT MAX(id) id " +
                                     "FROM " + LOGIN_BU_TABLE_NAME +
                                     " GROUP BY studentnummer, CAST(checkIn AS DATE))");
 
                     // Delete all Duplicate of the same day, someone can't enter the symposium twice
-                    PreparedStatement deleteDuplicates = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement deleteDuplicates = dbConnection.prepareStatement(
                             "DELETE FROM " + LOGIN_BU_TABLE_NAME + " WHERE id NOT IN (SELECT id FROM tmp_user);");
 
                     // Drop the temporary table
-                    PreparedStatement dropTempTable = DB_INSTANCE.getConnection().prepareStatement("DROP TABLE tmp_user;");
+                    PreparedStatement dropTempTable = dbConnection.prepareStatement("DROP TABLE tmp_user;");
 
                     makeTempTable.executeUpdate();
                     deleteDuplicates.executeUpdate();
                     dropTempTable.executeUpdate();
-                    DB_INSTANCE.closeConnection();
 
                     // Add new students to Bedrijfspunten
-                    PreparedStatement addNewStudentsToBedrijfspunten = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement addNewStudentsToBedrijfspunten = dbConnection.prepareStatement(
                             "INSERT INTO " + BEDRIJFSPUNTEN_TABLE_NAME + " (Studentnummer, AantalKeerGeweest, AantalBedrijfsuren, AantalBedrijfspunten) " +
                                     "SELECT DISTINCT studentnummer, 0, 0, 0.0 " +
                                     "FROM " + LOGIN_BU_TABLE_NAME + " " +
@@ -257,7 +264,7 @@ public class DatabaseHelper {
 
 
                     // Update the bedrijfspunten looking at the entries in LoginBU which are not added yet, see boolean 'ToegevoegdBedrijfspunten'
-                    PreparedStatement updateBedrijfspuntenDB = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement updateBedrijfspuntenDB = dbConnection.prepareStatement(
                             "UPDATE `" + BEDRIJFSPUNTEN_TABLE_NAME + "` " +
                                     "INNER JOIN `" + LOGIN_BU_TABLE_NAME + "` ON `" + BEDRIJFSPUNTEN_TABLE_NAME + "`.`Studentnummer` = `" + LOGIN_BU_TABLE_NAME + "`.`studentnummer` " +
                                     "SET `AantalKeerGeweest` = `AantalKeerGeweest` + 1, " +
@@ -266,7 +273,7 @@ public class DatabaseHelper {
                                     "WHERE `" + LOGIN_BU_TABLE_NAME + "`.`ToegevoegdBedrijfspunten` = 0;");
 
                     // AantalBedrijfspunten makes use of aantalBedrijsUren, so this is updated later
-                    PreparedStatement updateBedrijfspuntenRow = DB_INSTANCE.getConnection().prepareStatement(
+                    PreparedStatement updateBedrijfspuntenRow = dbConnection.prepareStatement(
                             "UPDATE `" + BEDRIJFSPUNTEN_TABLE_NAME + "` " +
                                     "SET `AantalBedrijfspunten`= round((`AantalBedrijfsuren` / 28), 1);");
 
@@ -274,70 +281,12 @@ public class DatabaseHelper {
                     addNewStudentsToBedrijfspunten.executeUpdate();
                     updateBedrijfspuntenDB.executeUpdate();
                     updateBedrijfspuntenRow.executeUpdate();
-                    DB_INSTANCE.closeConnection();
-
                     // Set this message in the db container text view
                     addStringToDbContainer(mainActivity.getString(R.string.updated_table));
 
                 } catch (SQLException e) {
                     e.printStackTrace();
                     addStringToDbContainer(mainActivity.getString(R.string.error_updating_bedrijfspunten_table));
-                }
-            }
-        };
-        thread.start();
-    }
-
-    public void checkForTables() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                /**
-                 * TODO: Only Bedrijfspunten is updated, after which a whole series of error occur.
-                 * Check why this is the case. My guess is that this occurs because the connection is closed for some reason.
-                 * Also the way that this function is called might have something to do with the error. It is called from
-                 * MainActicity, Line: 349
-                  */
-
-                final String SQL_CREATE_BEDRIJFSPUNTEN = "CREATE TABLE IF NOT EXISTS `Bedrijfspunten` (\n" +
-                        "  `Studentnummer` int(11) NOT NULL,\n" +
-                        "  `AantalKeerGeweest` int(11) NOT NULL,\n" +
-                        "  `AantalBedrijfsuren` int(11) NOT NULL,\n" +
-                        "  `AantalBedrijfspunten` double NOT NULL,\n" +
-                        "  PRIMARY KEY (`Studentnummer`)\n" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-
-                final String SQL_CREATE_LOGIN_BU = "CREATE TABLE IF NOT EXISTS `LoginBU` (\n" +
-                        "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                        "  `studentnummer` int(11) NOT NULL,\n" +
-                        "  `checkIn` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
-                        "  `checkUit` timestamp NULL DEFAULT NULL,\n" +
-                        "  `ToegevoegdBedrijfspunten` tinyint(1) NOT NULL DEFAULT '0',\n" +
-                        "  PRIMARY KEY (`studentnummer`,`checkIn`),\n" +
-                        "  KEY `id` (`id`)\n" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-                final String SQL_CREATE_STUDENTCODE = "CREATE TABLE IF NOT EXISTS `StudentCode` (\n" +
-                        "  `StudentCode` int(11) NOT NULL,\n" +
-                        "  `Serial` varchar(20) NOT NULL,\n" +
-                        "  `DatumGemaakt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n" +
-                        "  PRIMARY KEY (`Serial`),\n" +
-                        "  UNIQUE KEY `Serial` (`Serial`)\n" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-                try {
-
-                    PreparedStatement createTableBedrijfspunten = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
-                    PreparedStatement createTableLoginBU = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
-                    PreparedStatement createTableStudentcode = DB_INSTANCE.getConnection().prepareStatement(SQL_CREATE_BEDRIJFSPUNTEN);
-                    createTableBedrijfspunten.executeUpdate();
-                    createTableLoginBU.executeUpdate();
-                    createTableStudentcode.executeUpdate();
-                    DB_INSTANCE.closeConnection();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         };
