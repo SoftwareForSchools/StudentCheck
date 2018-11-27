@@ -328,6 +328,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addStudentFragment.show(ft, "addViaStudentNumberDialog");
     }
 
+    /**
+     * Calls the connectoToDatabaseFragment.
+     */
     private void showConnectToDatabaseFragment() {
         if (checkInFragmentOpen) return;
         checkInFragmentOpen = true;
@@ -355,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setText(R.string.db_connected);
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
-//            dbHelper.checkForTables();
+//            dbHelper.checkForTables(); // check the databasehelper function's to-do to check why this is commented!
         } else {
             dbConnectionStatus.setText(R.string.db_not_connected);
             dbConnectionStatus.setTextColor(Color.RED);
@@ -364,9 +367,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * This function adds a string to the container that shows database changes
-     *
-     * @param dbStatusString The string that is added to the container view
+     * This function adds a string to the container that shows database changes.
+     * @param dbStatusString The string that is added to the container view.
      */
 
     public void setDbContainerData(String dbStatusString) {
