@@ -119,7 +119,6 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="00dp"
-            android:scrollbars = "vertical"
             android:background="#bcbcbc"
             android:gravity="bottom" />
 
@@ -139,13 +138,18 @@
 
         <Button
             android:id="@+id/checkInViaStudentNumberButton"
-            android:layout_width="150dp"
+            android:layout_width="159dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
 
             android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/check_in_via_studentnummer" />
 
         <Button

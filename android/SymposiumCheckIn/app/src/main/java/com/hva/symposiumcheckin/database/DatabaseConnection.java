@@ -44,6 +44,7 @@ public class DatabaseConnection {
                 Class.forName("com.mysql.jdbc.Driver");
                 String url = "jdbc:mysql://oege.ie.hva.nl:3306/" + dbName
                             + "?allowMultiQueries=true";
+                // If oege will support SSL in the future, just uncomment this and it should work.
 //                        + "?verifyServerCertificate=true"
 //                        + "&useSSL=true"
 //                        + "&requireSSL=true";
