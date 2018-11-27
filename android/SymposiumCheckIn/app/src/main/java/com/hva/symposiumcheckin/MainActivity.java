@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setText(R.string.db_connected);
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
-            dbHelper.checkForTables();
+//            dbHelper.checkForTables();
         } else {
             dbConnectionStatus.setText(R.string.db_not_connected);
             dbConnectionStatus.setTextColor(Color.RED);
