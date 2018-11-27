@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Database helper for getting information
     public DatabaseHelper dbHelper;
 
+    private boolean tablesChecked;
+
     // Boolean to check if the Student check in fragment is already open
     public boolean checkInFragmentOpen = false;
 
@@ -358,8 +360,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setText(R.string.db_connected);
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
-//            dbHelper.checkForTables(); // check the databasehelper function's to-do to check why this is commented!
+            if(!tablesChecked) {
+                dbHelper.checkForTables(); // check the databasehelper function's to-do to check why this is commented!
+                tablesChecked = true;
+            }
         } else {
+            tablesChecked = false;
             dbConnectionStatus.setText(R.string.db_not_connected);
             dbConnectionStatus.setTextColor(Color.RED);
             dbConnectionStatus.setVisibility(View.VISIBLE);
