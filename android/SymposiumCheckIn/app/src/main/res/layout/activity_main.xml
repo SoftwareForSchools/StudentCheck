@@ -5,39 +5,9 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context="com.hva.symposiumcheckin.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu">
-
-    </android.support.design.widget.NavigationView>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -52,7 +22,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_margin="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="-132dp"
+            android:layout_marginRight="-132dp"
+            android:layout_marginBottom="472dp"
+            android:layout_toStartOf="@+id/scanNFCImage"
+            android:layout_toLeftOf="@+id/scanNFCImage"
             android:text="@string/loading_nfc_text"
             android:textColor="#000000"
             android:textSize="20sp" />
@@ -68,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginStart="213dp"
             android:layout_marginLeft="213dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="64dp"
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginBottom="20dp"
@@ -93,23 +69,20 @@
             android:id="@+id/scanNFCImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="86dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="132dp"
+            android:layout_marginLeft="132dp"
+            android:layout_marginTop="167dp"
+            android:layout_marginEnd="132dp"
+            android:layout_marginRight="132dp"
             android:layout_marginBottom="20dp"
             android:contentDescription="@string/nfc_image"
             android:src="@drawable/nfc_scan_icon" />
 
-
-        <TextView
-            android:id="@+id/scanStudentCardText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/scanNFCImage"
-            android:gravity="center"
-            android:text="@string/scan_student_text"
-            android:textColor="#000000"
-            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/dbActionsContainer"
@@ -154,8 +127,8 @@
             android:layout_alignBaseline="@+id/nfcStatusView"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="34dp"
+            android:layout_marginLeft="34dp"
             android:visibility="visible"
             tools:background="@android:color/transparent" />
 
@@ -166,11 +139,43 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="63dp"
-            android:layout_marginRight="63dp"
+            android:layout_marginTop="66dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
             android:background="@android:color/transparent"
             android:visibility="visible" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu">
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

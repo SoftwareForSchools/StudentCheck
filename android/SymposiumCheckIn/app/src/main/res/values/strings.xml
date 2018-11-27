@@ -46,4 +46,6 @@
     <string name="nav_checkedin">Checked in</string>
     <string name="nav_database">Database</string>
     <string name="nav_imagetext">Student Check</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
 </resources>

@@ -11,9 +11,16 @@ import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,13 +31,15 @@ import com.hva.symposiumcheckin.database.DatabaseConnection;
 import com.hva.symposiumcheckin.database.DatabaseHelper;
 import com.hva.symposiumcheckin.fragment.AddStudentDatabaseDialogFragment;
 import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
+import com.hva.symposiumcheckin.fragment.CheckedInFragment;
 import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
+import com.hva.symposiumcheckin.fragment.DatabaseViewFragment;
 
 import java.text.MessageFormat;
 
 //TODO: Stop app from crashing on first startup
 //TODO: This only occurs during first startup, so not that important to fix.
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
     // Represents NFC adapter
@@ -44,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Toolbar
     private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
 
     // Buttons
     private Button buttonRefreshNFC;
@@ -69,15 +81,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setToolbar();
         // Set last student credential to empty string
         mLastStudentCardSerial = "";
 
         setView();
+        setButtons();
 
         getNFCReader();
 
+        dbHelper = new DatabaseHelper(this);
+
+        // Set a reference to the this activity in DatabaseConnection
+        DatabaseConnection.getInstance().setMainActivity(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_scan:
+                getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.fragment_container)).commit();
+            break;
+            case R.id.nav_checkedin:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new CheckedInFragment()).commit();
+                break;
+            case R.id.nav_database:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new DatabaseViewFragment()).commit();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    private void setToolbar(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setButtons(){
         buttonRefreshNFC = findViewById(R.id.buttonRefreshNFC);
         buttonRefreshNFC.setBackgroundColor(Color.TRANSPARENT);
         buttonRefreshNFC.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getNFCReader();
             }
         });
+
         buttonConnectDB = findViewById(R.id.buttonConnectDB);
         buttonConnectDB.setBackgroundColor(Color.TRANSPARENT);
         buttonConnectDB.setOnClickListener(new View.OnClickListener() {
@@ -94,11 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showConnectToDatabaseFragment();
             }
         });
-
-        dbHelper = new DatabaseHelper(this);
-
-        // Set a reference to the this activity in DatabaseConnection
-        DatabaseConnection.getInstance().setMainActivity(this);
     }
 
     /**
