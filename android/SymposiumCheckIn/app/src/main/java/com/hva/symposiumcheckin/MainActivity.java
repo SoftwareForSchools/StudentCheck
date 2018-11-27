@@ -422,8 +422,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
             if(!tablesChecked) {
+                /*
+                 * TODO: Check if tables are in the database, if not, ask if they would like them added.
+                 */
                 dbHelper.insertTables();
-                checkInStatusView.setText("De tabel komt voor in de database!!!");
                 tablesChecked = true;
             }
         } else {
