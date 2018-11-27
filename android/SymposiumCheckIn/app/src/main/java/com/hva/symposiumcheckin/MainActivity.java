@@ -19,8 +19,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+<<<<<<< HEAD
 import android.util.Log;
 import android.view.MenuItem;
+=======
+import android.text.method.ScrollingMovementMethod;
+>>>>>>> 21a3828aeb8e6da0dcfda08e9a00e54c2477094e
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,10 +40,16 @@ import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
 import com.hva.symposiumcheckin.fragment.DatabaseViewFragment;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
+<<<<<<< HEAD
 //TODO: Stop app from crashing on first startup
 //TODO: This only occurs during first startup, so not that important to fix.
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+=======
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+>>>>>>> 21a3828aeb8e6da0dcfda08e9a00e54c2477094e
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
     // Represents NFC adapter
@@ -72,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Database helper for getting information
     public DatabaseHelper dbHelper;
+
+    private boolean tablesChecked;
 
     // Boolean to check if the Student check in fragment is already open
     public boolean checkInFragmentOpen = false;
@@ -168,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView = findViewById(R.id.checkInStatusView);
         dbConnectionStatus = findViewById(R.id.dbConnectionStatusView);
         dbDataContainer = findViewById(R.id.dbActionsContainer);
+        // Make the messagebox scrollable (in combination with editted xml file)
+        dbDataContainer.setMovementMethod(new ScrollingMovementMethod());
 
         findViewById(R.id.updateBedrijfspuntenButton).setOnClickListener(this);
         findViewById(R.id.checkInViaStudentNumberButton).setOnClickListener(this);
@@ -382,6 +396,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addStudentFragment.show(ft, "addViaStudentNumberDialog");
     }
 
+    /**
+     * Calls the connectoToDatabaseFragment.
+     */
     private void showConnectToDatabaseFragment() {
         if (checkInFragmentOpen) return;
         checkInFragmentOpen = true;
@@ -409,8 +426,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setText(R.string.db_connected);
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
-            dbHelper.checkForTables();
+            if(!tablesChecked) {
+                dbHelper.insertTables();
+                checkInStatusView.setText("De tabel komt voor in de database!!!");
+                tablesChecked = true;
+            }
         } else {
+            tablesChecked = false;
             dbConnectionStatus.setText(R.string.db_not_connected);
             dbConnectionStatus.setTextColor(Color.RED);
             dbConnectionStatus.setVisibility(View.VISIBLE);
@@ -418,14 +440,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * This function adds a string to the container that shows database changes
-     *
-     * @param dbStatusString The string that is added to the container view
+     * This function adds a string to the container that shows database changes.
+     * @param dbStatusString The string that is added to the container view.
      */
 
-    //TODO: Append current time to message.
-    //TODO: Make message box scrollable, so all messages can be viewed.
     public void setDbContainerData(String dbStatusString) {
-        dbDataContainer.append(dbStatusString + "\n");
+        String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+        dbDataContainer.append(timeStamp + " - " +dbStatusString +"\n");
     }
 }
