@@ -19,12 +19,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-<<<<<<< HEAD
 import android.util.Log;
 import android.view.MenuItem;
-=======
 import android.text.method.ScrollingMovementMethod;
->>>>>>> 21a3828aeb8e6da0dcfda08e9a00e54c2477094e
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,13 +40,9 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-<<<<<<< HEAD
 //TODO: Stop app from crashing on first startup
 //TODO: This only occurs during first startup, so not that important to fix.
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
-=======
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
->>>>>>> 21a3828aeb8e6da0dcfda08e9a00e54c2477094e
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
     // Represents NFC adapter
