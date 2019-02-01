@@ -1,6 +1,9 @@
 # StudentCheck #
 This project is for scanning if students are present in courses. The project has two consist of two applications, a Java Application and a Android Application.
 
+For more info check the wiki:
+https://github.com/obin1000/StudentCheck/wiki
+
 ### Database: ###
 * Make your own phpmyadmin database
 * For example tables, run the sql code in your database. The SQL code is in the following directory: example_database_tables
