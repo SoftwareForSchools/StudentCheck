@@ -11,5 +11,4 @@ Thus far we have made the following contents on the Wiki:
 * Sequence diagrams
 
 All of which can be found on:
-
 https://github.com/SoftwareForSchools/StudentCheck/wiki
