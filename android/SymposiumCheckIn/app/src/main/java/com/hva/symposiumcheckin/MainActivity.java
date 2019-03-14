@@ -11,20 +11,38 @@ import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hva.symposiumcheckin.database.DatabaseConnection;
 import com.hva.symposiumcheckin.database.DatabaseHelper;
 import com.hva.symposiumcheckin.fragment.AddStudentDatabaseDialogFragment;
 import com.hva.symposiumcheckin.fragment.CheckInStudentNumberDialogFragment;
+import com.hva.symposiumcheckin.fragment.CheckedInFragment;
+import com.hva.symposiumcheckin.fragment.ConnectToDatabaseDialogFragment;
+import com.hva.symposiumcheckin.fragment.DatabaseViewFragment;
 
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+//TODO: Stop app from crashing on first startup
+//TODO: This only occurs during first startup, so not that important to fix.
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
     // Intent that is opened when NFC has scanned a card
     private PendingIntent mPendingIntent;
     // Represents NFC adapter
@@ -35,6 +53,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // String in which the last student card credential is saved, for when someone accidentally scans two times in a row
     private String mLastStudentCardSerial;
+
+    //Toolbar
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+
+    // Buttons
+    private Button buttonRefreshNFC;
+    private Button buttonConnectDB;
 
     // TextViews
     private TextView nfcStatusView;
@@ -47,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Database helper for getting information
     public DatabaseHelper dbHelper;
+
+    private boolean tablesChecked;
+
     // Boolean to check if the Student check in fragment is already open
     public boolean checkInFragmentOpen = false;
 
@@ -54,14 +85,85 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setToolbar();
         // Set last student credential to empty string
         mLastStudentCardSerial = "";
 
         setView();
+        setButtons();
         getNFCReader();
 
         dbHelper = new DatabaseHelper(this);
-        getDbConnection();
+
+        // Set a reference to the this activity in DatabaseConnection
+        DatabaseConnection.getInstance().setMainActivity(this);
+        navigationView.setCheckedItem(R.id.nav_scan);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_scan:
+                if(getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
+                    getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.fragment_container)).commit();
+                }
+            break;
+            case R.id.nav_checkedin:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new CheckedInFragment()).commit();
+                break;
+            case R.id.nav_database:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new DatabaseViewFragment()).commit();
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    private void setToolbar(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.nav_drawer_open, R.string.nav_drawer_close);
+
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setButtons(){
+        buttonRefreshNFC = findViewById(R.id.buttonRefreshNFC);
+        buttonRefreshNFC.setBackgroundColor(Color.TRANSPARENT);
+        buttonRefreshNFC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getNFCReader();
+            }
+        });
+
+        buttonConnectDB = findViewById(R.id.buttonConnectDB);
+        buttonConnectDB.setBackgroundColor(Color.TRANSPARENT);
+        buttonConnectDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showConnectToDatabaseFragment();
+            }
+        });
     }
 
     /**
@@ -73,6 +175,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView = findViewById(R.id.checkInStatusView);
         dbConnectionStatus = findViewById(R.id.dbConnectionStatusView);
         dbDataContainer = findViewById(R.id.dbActionsContainer);
+        // Make the messagebox scrollable (in combination with editted xml file)
+        dbDataContainer.setMovementMethod(new ScrollingMovementMethod());
 
         findViewById(R.id.updateBedrijfspuntenButton).setOnClickListener(this);
         findViewById(R.id.checkInViaStudentNumberButton).setOnClickListener(this);
@@ -133,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scanNFCImage.setVisibility(View.VISIBLE);
 
         getNFCReader();
-        getDbConnection();
     }
 
     @Override
@@ -193,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkInStatusView.setText(MessageFormat.format(getString(R.string.student_card_checked_in), studentNumber));
         checkInStatusView.setTextColor(Color.GREEN);
 
-        scanNFCImage.setVisibility(View.GONE);
         checkInStatusView.setVisibility(View.VISIBLE);
 
     }
@@ -290,6 +392,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
+     * Calls the connectoToDatabaseFragment.
+     */
+    private void showConnectToDatabaseFragment() {
+        if (checkInFragmentOpen) return;
+        checkInFragmentOpen = true;
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("tag");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment connectToDatabase = ConnectToDatabaseDialogFragment.newInstance();
+        connectToDatabase.setCancelable(false);
+        connectToDatabase.show(ft, "tag");
+    }
+
+    /**
      * Set view for when there is a database connection and if there is not.
      *
      * @param hasDatabaseConnection boolean that is true when connected to the database
@@ -299,7 +421,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dbConnectionStatus.setText(R.string.db_connected);
             dbConnectionStatus.setTextColor(Color.GREEN);
             dbConnectionStatus.setVisibility(View.VISIBLE);
+            if(!tablesChecked) {
+                /*
+                 * TODO: Check if tables are in the database, if not, ask if they would like them added.
+                 */
+                dbHelper.insertTables();
+                tablesChecked = true;
+            }
         } else {
+            tablesChecked = false;
             dbConnectionStatus.setText(R.string.db_not_connected);
             dbConnectionStatus.setTextColor(Color.RED);
             dbConnectionStatus.setVisibility(View.VISIBLE);
@@ -307,11 +437,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * This function adds a string to the container that shows database changes
-     *
-     * @param dbStatusString The string that is added to the container view
+     * This function adds a string to the container that shows database changes.
+     * @param dbStatusString The string that is added to the container view.
      */
+
     public void setDbContainerData(String dbStatusString) {
-        dbDataContainer.append(dbStatusString + "\n");
+        String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+        dbDataContainer.append(timeStamp + " - " +dbStatusString +"\n");
     }
 }

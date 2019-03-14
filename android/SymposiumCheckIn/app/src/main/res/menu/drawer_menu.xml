@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_scan"
+            android:icon="@drawable/ic_nfc"
+            android:title="@string/nav_scan" />
+        <item
+            android:id="@+id/nav_checkedin"
+            android:icon="@drawable/ic_check_box"
+            android:title="@string/nav_checkedin" />
+        <item
+            android:id="@+id/nav_database"
+            android:icon="@drawable/ic_compare_arrows"
+            android:title="@string/nav_database" />
+    </group>
+
+</menu>

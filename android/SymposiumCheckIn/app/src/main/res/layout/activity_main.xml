@@ -1,100 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="com.hva.symposiumcheckin.MainActivity">
 
-    <TextView
-        android:id="@+id/nfcStatusView"
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/backgroundimage"
+        android:orientation="vertical"
+        tools:context="com.hva.symposiumcheckin.MainActivity">
+
+        <TextView
+            android:id="@+id/nfcStatusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="-132dp"
+            android:layout_marginRight="-132dp"
+            android:layout_marginBottom="472dp"
+            android:layout_toStartOf="@+id/scanNFCImage"
+            android:layout_toLeftOf="@+id/scanNFCImage"
+            android:text="@string/loading_nfc_text"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/dbConnectionStatusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="213dp"
+            android:layout_marginLeft="213dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/db_not_connected"
+            android:textColor="#FF0000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/checkInStatusView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/scanNFCImage"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="226dp"
+            android:layout_marginBottom="-145dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/scanNFCImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="132dp"
+            android:layout_marginLeft="132dp"
+            android:layout_marginTop="167dp"
+            android:layout_marginEnd="132dp"
+            android:layout_marginRight="132dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/nfc_image"
+            android:src="@drawable/nfc_scan_icon" />
+
+
+        <TextView
+            android:id="@+id/dbActionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:layout_above="@id/updateBedrijfspuntenButton"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="00dp"
+            android:background="#bcbcbc"
+            android:gravity="bottom" />
+
+        <Button
+            android:id="@+id/updateBedrijfspuntenButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+
+            android:layout_alignParentLeft="true"
+
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:text="@string/update_bedrijfspunten" />
+
+        <Button
+            android:id="@+id/checkInViaStudentNumberButton"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/check_in_via_studentnummer" />
+
+        <Button
+            android:id="@+id/buttonRefreshNFC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/nfcStatusView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="34dp"
+            android:layout_marginLeft="34dp"
+            android:visibility="visible"
+            tools:background="@android:color/transparent" />
+
+        <Button
+            android:id="@+id/buttonConnectDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="66dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
+            android:background="@android:color/transparent"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/drawer_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="20dp"
-        android:text="@string/loading_nfc_text"
-        android:textColor="#000000"
-        android:textSize="20sp" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu">
 
-    <TextView
-        android:id="@+id/dbConnectionStatusView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="20dp"
-        android:text="@string/db_connection_loading"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/checkInStatusView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nfcStatusView"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/scanNFCImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_below="@id/checkInStatusView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="15dp"
-        android:contentDescription="@string/nfc_image"
-        android:src="@drawable/nfc_scan_icon" />
-
-
-    <TextView
-        android:id="@+id/scanStudentCardText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scanNFCImage"
-        android:gravity="center"
-        android:text="@string/scan_student_text"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/dbActionsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_above="@id/updateBedrijfspuntenButton"
-        android:layout_marginBottom="00dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:background="#bcbcbc"
-        android:gravity="bottom" />
-
-    <Button
-        android:id="@+id/updateBedrijfspuntenButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-
-        android:layout_alignParentLeft="true"
-
-        android:layout_alignParentStart="true"
-        android:layout_margin="10dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/update_bedrijfspunten" />
-
-    <Button
-        android:id="@+id/checkInViaStudentNumberButton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-
-        android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
-        android:text="@string/check_in_via_studentnummer" />
-
-</RelativeLayout>
+    </android.support.design.widget.NavigationView>
+</android.support.v4.widget.DrawerLayout>

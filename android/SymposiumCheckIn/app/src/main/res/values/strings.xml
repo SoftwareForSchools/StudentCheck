@@ -14,8 +14,8 @@
     <string name="student_card_checked_in">{0} is ingechecked</string>
     <string name="check_in_via_studentnummer">Check in via studentnummer</string>
     <string name="db_connection_loading">Db connectie laden…</string>
-    <string name="db_connected">Verbonden met db</string>
-    <string name="db_not_connected">Niet verbonden met db</string>
+    <string name="db_connected">Verbonden met database</string>
+    <string name="db_not_connected">Niet verbonden met database</string>
     <string name="fill_in_student_number">Vul studentnummer in om in te checken:</string>
     <string name="student_number">Studentnummer</string>
     <string name="check_in">Check in</string>
@@ -34,4 +34,18 @@
     <string name="turn_nfc_on_msg">Voordat je deze app volledig wilt gebruiken. Moet je wel je NFC aanzetten.</string>
     <string name="nfc_not_supported_msg">Je telefoon heeft geen NFC, je kan de app niet volledig gebruiken.</string>
     <string name="student_already_scanned">Deze student is al ingescand.</string>
+    <string name="db_username">Gebruikersnaam</string>
+    <string name="db_password">Wachtwoord</string>
+    <string name="connect_message">Vul je gegevens voor jouw Oege account in.</string>
+    <string name="connect">Connect</string>
+    <string name="db_name">Naam van de database</string>
+    <string name="jdbc_driver_not_found">MYSQL ERROR: jdbc driver niet gevonden.</string>
+    <string name="failed_closing_sql_connection">MYSQL ERROR: fout in het afsluiten van de connectie</string>
+    <string name="button_refresh">REFRESH</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_checkedin">Checked in</string>
+    <string name="nav_database">Database</string>
+    <string name="nav_imagetext">Student Check</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
 </resources>
